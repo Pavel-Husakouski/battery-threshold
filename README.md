@@ -97,13 +97,13 @@ make install
 
 ```bash
 # Check timer status
-sudo systemctl status battery-threshold.timer
+systemctl status battery-threshold.timer
 
-# Check service logs (live tail)
-sudo journalctl -u battery-threshold.service -f
+# Check last log entries from the last hour
+journalctl --since "1 hours ago" | grep battery-threshold      
 
-# Check last 10 log entries from the last 24 hours
-sudo journalctl -u battery-threshold.service -n 10 --since "24 hours ago"
+# Check service logs 
+journalctl -u battery-threshold.service -f
 
 # Enable debug mode for detailed logging
 sudo systemctl edit battery-threshold.service
@@ -111,6 +111,17 @@ sudo systemctl edit battery-threshold.service
 sudo systemctl daemon-reload
 sudo systemctl restart battery-threshold.timer
 ```
+
+## Typical log output
+
+Example output from `journalctl --since "1 hours ago" | grep battery-threshold`:
+
+```bash
+battery-threshold[25482]: changed threshold from 50 to 100 (capacity: 59%)
+battery-threshold[33583]: changed threshold from 100 to 50 (capacity: 71%)
+battery-threshold[45884]: changed threshold from 50 to 100 (capacity: 59%)
+battery-threshold[52308]: changed threshold from 100 to 50 (capacity: 71%)
+
 
 ## Viewing Current Battery Info
 
