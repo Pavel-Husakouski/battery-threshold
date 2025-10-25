@@ -2,6 +2,12 @@
 
 A systemd service to automatically manage battery charge limits on ASUS laptops.
 
+## Disclaimer
+
+**This is a custom workaround solution for specific hardware issues.** Before using this service, consider trying the [asusctl utility](#alternative-solution) first, which is a more established and actively maintained tool for ASUS laptop management. This service is designed for situations where standard tools don't provide the needed functionality or when dynamic, automated threshold management with hysteresis behavior is required.
+
+Use this software at your own risk. While it has been tested on the ASUS Vivobook 18 M1807HA, results may vary on different hardware configurations.
+
 ## The Problem
 
 **The ASUS Vivobook 18 M1807HA has critical issues with battery charge limit management:**
@@ -11,6 +17,25 @@ A systemd service to automatically manage battery charge limits on ASUS laptops.
 2. **Limited accepted values**: The laptop sometimes refuses to accept charge limit values unless they are exactly 50 or 100. It is unknown if all laptops have this issue or if it's specific to certain units/firmware versions.
 
 The Linux kernel provides the ability to set battery charge thresholds through `/sys/class/power_supply/BAT0/charge_control_end_threshold`, which helps extend battery lifespan by preventing it from constantly charging to 100%. However, on the ASUS Vivobook 18 M1807HA, this setting is not persistent and gets reset, requiring manual intervention after every reboot or suspend. Additionally, the hardware may reject arbitrary threshold values, limiting the flexibility of battery management.
+
+## Alternative Solution
+
+### asusctl Utility
+
+For the most of ASUS laptops the main approach is to use the `asusctl` utility, which is part of the [asusctl/supergfxctl](https://gitlab.com/asus-linux/asusctl) project designed for ASUS laptops.
+
+Example command to set battery charge limit:
+
+```bash
+# Set battery charge limit to 80%
+asusctl -c 80
+```
+
+**Limitations:**
+
+**Static threshold only**: While `asusctl` is a powerful utility for managing ASUS laptop features, it supports just a fixed charge limit (e.g., 80%) that remains constant regardless of battery level.
+
+This systemd service complements or replaces `asusctl` by providing automated, dynamic threshold management with hysteresis behavior.
 
 ## The Solution
 
@@ -102,25 +127,6 @@ cat /sys/class/power_supply/BAT0/charge_control_end_threshold
 ```bash
 make uninstall
 ```
-
-## Alternative Solution
-
-### asusctl Utility
-
-An alternative approach is to use the `asusctl` utility, which is part of the [asusctl/supergfxctl](https://gitlab.com/asus-linux/asusctl) project designed for ASUS laptops.
-
-Example command to set battery charge limit:
-
-```bash
-# Set battery charge limit to 80%
-asusctl -c 80
-```
-
-**Limitations:**
-
-**Static threshold only**: While `asusctl` is a powerful utility for managing ASUS laptop features, it supports just a fixed charge limit (e.g., 80%) that remains constant regardless of battery level. 
-
-This systemd service complements or replaces `asusctl` by providing automated, dynamic threshold management with hysteresis behavior.
 
 ## Files
 
