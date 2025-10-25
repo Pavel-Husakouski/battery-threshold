@@ -1,0 +1,19 @@
+[Unit]
+Description=Adjust battery charge control end threshold
+
+[Service]
+Type=oneshot
+User=root
+Environment=DEBUG=0
+Environment=LOW_CAPACITY=60
+Environment=HIGH_CAPACITY=70
+Environment=HIGH_THRESHOLD=100
+Environment=LOW_THRESHOLD=50
+ExecStart=/etc/systemd/system/battery-threshold.sh
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=battery-threshold
+LogLevelMax=warning
+
+[Install]
+WantedBy=multi-user.target
