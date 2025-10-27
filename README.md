@@ -71,13 +71,13 @@ This creates a hysteresis effect that keeps your battery in the optimal range fo
 
 All thresholds are configurable through environment variables in `battery-threshold.service`:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `LOW_CAPACITY` | 60 | Below this %, charge to HIGH_THRESHOLD |
-| `HIGH_CAPACITY` | 70 | Above this %, charge to LOW_THRESHOLD |
-| `HIGH_THRESHOLD` | 100 | Max charge when battery is low |
-| `LOW_THRESHOLD` | 50 | Max charge when battery is high |
-| `DEBUG` | 0 | Set to 1 to enable debug logging |
+| Variable         | Default | Description                            |
+|------------------|---------|----------------------------------------|
+| `LOW_CAPACITY`   | 60      | Below this %, charge to HIGH_THRESHOLD |
+| `HIGH_CAPACITY`  | 70      | Above this %, charge to LOW_THRESHOLD  |
+| `HIGH_THRESHOLD` | 100     | Max charge when battery is low         |
+| `LOW_THRESHOLD`  | 50      | Max charge when battery is high        |
+| `DEBUG`          | 0       | Set to 1 to enable debug logging       |
 
 ### Customizing Thresholds
 
