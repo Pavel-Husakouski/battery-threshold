@@ -20,22 +20,32 @@ The Linux kernel provides the ability to set battery charge thresholds through `
 
 ## Alternative Solution
 
+#### Simple echo method
+
+A minimal approach is to write a fixed value to the kernel sysfs file (requires root). Example:
+
+```bash
+# as root
+echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold
+```
+
+**Limitations:**
+
+At the time of writing, this solution did not work reliably on the ASUS Vivobook 18 M1807HA. If it works for you, it's an acceptable lightweight solution.
+
 ### asusctl Utility
 
 For the most of ASUS laptops the main approach is to use the `asusctl` utility, which is part of the [asusctl/supergfxctl](https://gitlab.com/asus-linux/asusctl) project designed for ASUS laptops.
 
-Example command to set battery charge limit:
+Example command to set the battery charge limit:
 
 ```bash
-# Set battery charge limit to 80%
 asusctl -c 80
 ```
 
 **Limitations:**
 
 **Static threshold only**: While `asusctl` is a powerful utility for managing ASUS laptop features, it supports just a fixed charge limit (e.g., 80%) that remains constant regardless of battery level.
-
-This systemd service complements or replaces `asusctl` by providing automated, dynamic threshold management with hysteresis behavior.
 
 ## The Solution
 
@@ -114,7 +124,6 @@ sudo systemctl restart battery-threshold.timer
 
 ## Typical log output
 
-Example output from `journalctl --since "1 hours ago" | grep battery-threshold`:
 
 ```bash
 battery-threshold[25482]: changed threshold from 50 to 100 (capacity: 59%)
@@ -159,4 +168,3 @@ Written by Pauel in 2025.
 This is free and unencumbered software released into the public domain.
 
 See the [LICENSE](LICENSE) file for full details.
-
