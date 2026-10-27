@@ -1,0 +1,15 @@
+[Unit]
+Description=Lower battery charge control end threshold before sleep
+Before=sleep.target
+
+[Service]
+Type=oneshot
+User=root
+Environment=LOW_THRESHOLD=50
+ExecStart=/bin/sh -c 'printf "%%s" "$LOW_THRESHOLD" > /sys/class/power_supply/BAT0/charge_control_end_threshold'
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=battery-threshold
+
+[Install]
+WantedBy=sleep.target
