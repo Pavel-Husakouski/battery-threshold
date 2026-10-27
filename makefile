@@ -1,24 +1,27 @@
 # Battery threshold system deployment
 INSTALL_DIR = /etc/systemd/system
 
-.PHONY: install uninstall copy start stop status log last
+.PHONY: install uninstall copy enable disable status log last
 
-install: copy start
+install: copy enable
 
 copy:
 	sudo cp battery-threshold.sh $(INSTALL_DIR)/ && sudo chmod +x $(INSTALL_DIR)/battery-threshold.sh
-	sudo cp battery-threshold.{service,timer} $(INSTALL_DIR)/
+	sudo cp battery-threshold.{service,timer} battery-threshold-sleep.service $(INSTALL_DIR)/
 
-start:
+enable:
 	sudo systemctl daemon-reload
 	sudo systemctl enable --now battery-threshold.timer
+	sudo systemctl enable battery-threshold-sleep.service
 
-stop:
+disable:
 	sudo systemctl disable --now battery-threshold.timer
+	sudo systemctl disable battery-threshold-sleep.service
 
 uninstall:
 	sudo systemctl disable --now battery-threshold.timer || true
-	sudo rm -f $(INSTALL_DIR)/battery-threshold.{sh,service,timer}
+	sudo systemctl disable battery-threshold-sleep.service || true
+	sudo rm -f $(INSTALL_DIR)/battery-threshold.{sh,service,timer} $(INSTALL_DIR)/battery-threshold-sleep.service
 	sudo systemctl daemon-reload
 
 status:
